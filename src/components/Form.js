@@ -1,36 +1,43 @@
-import React, { useState } from "react";
-import { Save } from "react-feather";
-import { createData } from "../services/customerService";
+import React, { useEffect, useState } from "react";
+import { Save, X } from "react-feather";
+import { createData, updateData } from "../services/customerService";
+import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
-const Form = () => {
+export const DateLongTH = (date) => {
+  dayjs.locale("th");
+  return dayjs(date).format("DD MMMM BBBB");
+};
+
+const Form = ({ form, clearData }) => {
   const [formData, setFormData] = useState({
     customerName: "",
-    age: "",
+    age: 0,
     tel: "",
     address: "",
     diagnose: "",
     menu: "",
-    Ros: "",
-    CYL_R: "",
-    AxR: "",
-    AddR: "",
-    Los: "",
-    CYL_L: "",
-    AxL: "",
-    AddL: "",
-    PDR: "",
-    PDL: "",
-    SHR: "",
-    SHL: "",
+    Ros: 0,
+    CYL_R: 0,
+    AxR: 0,
+    AddR: 0,
+    Los: 0,
+    CYL_L: 0,
+    AxL: 0,
+    AddL: 0,
+    PDR: 0,
+    PDL: 0,
+    SHR: 0,
+    SHL: 0,
     FType: "",
-    FPrice: "",
+    FPrice: 0,
     LType: "",
-    LPrice: "",
+    LPrice: 0,
     FBrand: "",
     color: "",
-    PriceTotal: "",
-    Earn: "",
-    Balance: "",
+    PriceTotal: 0,
+    Earn: 0,
+    Balance: 0,
     Desc: "",
     Signature: "",
   });
@@ -68,15 +75,95 @@ const Form = () => {
     Signature,
   } = formData;
 
-  const [changeButton, setChangeButton] = useState(true);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { success } = await createData(formData);
-    if (success) {
-      window.location.reload();
+    if (form.length === 0) {
+      const { success } = await createData(formData);
+      if (success) {
+        Swal.fire({
+          title: "เพิ่มรายชื่อเสร็จสิ้น",
+          icon: "success",
+          showConfirmButton: false,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    } else {
+      const { success } = await updateData(
+        form?.customer?.slug,
+        form?.slug,
+        formData
+      );
+
+      if (success) {
+        Swal.fire({
+          title: "อัพเดตเสร็จสิ้น",
+          icon: "success",
+          showConfirmButton: false,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
     }
   };
+
+  const ClearDataMain = () => {
+    clearData();
+    setFormData({
+      customerName: "",
+      age: 0,
+      tel: "",
+      address: "",
+      diagnose: "",
+      menu: "",
+      Ros: 0,
+      CYL_R: 0,
+      AxR: 0,
+      AddR: 0,
+      Los: 0,
+      CYL_L: 0,
+      AxL: 0,
+      AddL: 0,
+      PDR: 0,
+      PDL: 0,
+      SHR: 0,
+      SHL: 0,
+      FType: "",
+      FPrice: 0,
+      LType: "",
+      LPrice: 0,
+      FBrand: "",
+      color: "",
+      PriceTotal: 0,
+      Earn: 0,
+      Balance: 0,
+      Desc: "",
+      Signature: "",
+    });
+  };
+
+  useEffect(() => {
+    if (form.length === 0) {
+    } else {
+      const customerName = form?.customer?.customerName;
+      const age = form?.customer?.age;
+      const tel = form?.customer?.tel;
+      const address = form?.customer?.address;
+      const diagnose = form?.customer?.diagnose;
+      const DoP = dayjs(form?.DoP).format("YYYY-MM-DD");
+      setFormData({
+        ...form,
+        customerName: customerName,
+        age: age,
+        tel: tel,
+        address: address,
+        diagnose: diagnose,
+        DoP: DoP,
+      });
+    }
+  }, [form]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -99,7 +186,7 @@ const Form = () => {
               className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
               id="customerName"
               name="customerName"
-              value={customerName}
+              value={customerName || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -110,8 +197,8 @@ const Form = () => {
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
-              type="text"
-              className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
+              type="number"
+              className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded age"
               id="age"
               name="age"
               value={age}
@@ -130,7 +217,7 @@ const Form = () => {
               pattern="/(0)\d{9}/"
               id="tel"
               name="tel"
-              value={tel}
+              value={tel || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -145,7 +232,7 @@ const Form = () => {
               className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
               id="address"
               name="address"
-              value={address}
+              value={address || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -160,7 +247,7 @@ const Form = () => {
               className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
               id="diagnose"
               name="diagnose"
-              value={diagnose}
+              value={diagnose || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -177,7 +264,7 @@ const Form = () => {
                 required
                 id="menu"
                 name="menu"
-                value={menu}
+                value={menu || ""}
                 onChange={handleInputChange}
               >
                 <option value="">เลือกรายการ</option>
@@ -370,7 +457,7 @@ const Form = () => {
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6]"
               id="FType"
               name="FType"
-              value={FType}
+              value={FType || ""}
               onChange={handleInputChange}
             />
             <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
@@ -397,7 +484,7 @@ const Form = () => {
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
               id="LType"
               name="LType"
-              value={LType}
+              value={LType || ""}
               onChange={handleInputChange}
             />
             <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
@@ -427,7 +514,7 @@ const Form = () => {
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
               id="FBrand"
               name="FBrand"
-              value={FBrand}
+              value={FBrand || ""}
               onChange={handleInputChange}
             />
             <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
@@ -438,7 +525,7 @@ const Form = () => {
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
               id="color"
               name="color"
-              value={color}
+              value={color || ""}
               onChange={handleInputChange}
             />
           </div>
@@ -506,7 +593,7 @@ const Form = () => {
                 className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
                 id="desc"
                 name="desc"
-                value={Desc}
+                value={Desc || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -536,19 +623,27 @@ const Form = () => {
                 className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
                 id="Signature"
                 name="Signature"
-                value={Signature}
+                value={Signature || ""}
                 onChange={handleInputChange}
               />
             </div>
           </div>
         </div>
-        <div>
+        <div className="flex">
           <button
             className="flex text-white bg-green-500 w-fit p-3 rounded-md hover:bg-green-900 transition-all duration-200 ease-in-out"
             onClick={handleSubmit}
           >
             <Save size={24} className="mx-1" />
-            {changeButton ? "เพิ่มข้อมูล" : "บันทึกข้อมูล"}
+            {form.length === 0 ? "เพิ่มข้อมูล" : "บันทึกข้อมูล"}
+          </button>
+
+          <button
+            className="flex text-white bg-red-500 w-fit p-3 rounded-md hover:bg-red-900 transition-all duration-200 ease-in-out mx-5"
+            onClick={ClearDataMain}
+          >
+            <X size={24} className="mx-1" />
+            ล้างข้อมูล
           </button>
         </div>
       </div>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Trash2, Edit, Eye, Search } from "react-feather";
-import { getData } from "../services/customerService";
-import { useMount } from "./hooks";
+import dayjs from "dayjs";
 
-const Table = () => {
+const Table = ({ initialData, handleClickIcon }) => {
   const [pending, setPending] = useState(true);
-  const [initialData, setInitialData] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -15,21 +14,21 @@ const Table = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  const fetchDataDefault = async () => {
+  const filterData = (data) => {
     try {
-      const initData = await getData();
-      setInitialData({
-        ...initData,
-      });
+      const filter = initialData.data.filter((item) =>
+        item.customer.customerName.includes(data.toLowerCase())
+      );
+      if (filter) {
+        return filter;
+      }
     } catch (error) {}
   };
-
-  useMount(() => void fetchDataDefault());
 
   const columns = [
     {
       name: "วันที่ซื้อสินค้า",
-      selector: (row) => row.DoP,
+      selector: (row) => DateLongTH(row.DoP),
       sortable: true,
     },
     {
@@ -59,11 +58,20 @@ const Table = () => {
     },
     {
       name: "",
-      selector: () => (
+      selector: (row) => (
         <div className="flex items-end">
-          <Eye className="text-blue-500 mx-3 cursor-pointer hover:text-blue-900" />
-          <Edit className="text-yellow-500 mx-3 cursor-pointer hover:text-yellow-900" />
-          <Trash2 className="text-red-500 mx-3 cursor-pointer hover:text-red-900" />
+          <Eye
+            className="text-blue-500 mx-3 cursor-pointer hover:text-blue-900"
+            onClick={() => handleClickIcon("views")}
+          />
+          <Edit
+            className="text-yellow-500 mx-3 cursor-pointer hover:text-yellow-900"
+            onClick={() => handleClickIcon("edit", null, row.slug)}
+          />
+          <Trash2
+            className="text-red-500 mx-3 cursor-pointer hover:text-red-900"
+            onClick={() => handleClickIcon("delete", null, row.slug)}
+          />
         </div>
       ),
     },
@@ -74,7 +82,7 @@ const Table = () => {
       <DataTable
         title="รายชื่อลูกค้า"
         columns={columns}
-        data={initialData.data}
+        data={search ? filterData(search) : initialData.data}
         pagination
         paginationRowsPerPageOptions={[5, 10]}
         progressPending={pending}
@@ -86,6 +94,7 @@ const Table = () => {
             <input
               placeholder="Search"
               className="border border-black p-2 w-full rounded relative"
+              onChange={(e) => setSearch(e.target.value)}
             />
             <Search className="absolute top-3.5 right-5 text-gray-500" />
           </div>
@@ -96,3 +105,8 @@ const Table = () => {
 };
 
 export default Table;
+
+export const DateLongTH = (date) => {
+  dayjs.locale("th");
+  return dayjs(date).format("DD MMMM BBBB");
+};
