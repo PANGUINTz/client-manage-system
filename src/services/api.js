@@ -1,7 +1,7 @@
 import axios from "axios";
 // import { destroyUserSession, getAccessToken, LOGIN_URL } from "./AuthService";
 // const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
-const baseUrl = `http://localhost:8080/api`;
+const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
 
 const api = axios.create({
   baseURL: baseUrl,
@@ -35,8 +35,8 @@ const api = axios.create({
 //   }
 // );
 
-// export function setApiToken(token) {
-//   api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-// }
+export function setApiToken(token) {
+  api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
 
 export default api;
