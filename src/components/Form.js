@@ -12,23 +12,23 @@ export const DateLongTH = (date) => {
 const Form = ({ form, clearData }) => {
   const [formData, setFormData] = useState({
     customerName: "",
-    age: 0,
+    age: "",
     tel: "",
     address: "",
     diagnose: "",
     menu: "",
-    Ros: 0,
-    CYL_R: 0,
+    Ros: "",
+    CYL_R: "",
     AxR: 0,
     AddR: 0,
-    Los: 0,
-    CYL_L: 0,
+    Los: "",
+    CYL_L: "",
     AxL: 0,
     AddL: 0,
-    PDR: 0,
-    PDL: 0,
-    SHR: 0,
-    SHL: 0,
+    PDR: "",
+    PDL: "",
+    SHR: "",
+    SHL: "",
     FType: "",
     FPrice: 0,
     LType: "",
@@ -75,9 +75,27 @@ const Form = ({ form, clearData }) => {
     Signature,
   } = formData;
 
+  const patternTel = /^(09|08|06)\d{8}$/;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.length === 0) {
+      if (formData.customerName === "" || formData.menu === "") {
+        Swal.fire({
+          title: "กรุณากรอกข้อมูลลูกค้าและรายการ",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      } else if (!patternTel.test(formData?.tel)) {
+        Swal.fire({
+          title: "กรุณากรอกเบอร์โทรให้ถูกต้อง",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+
       const { success } = await createData(formData);
       if (success) {
         Swal.fire({
@@ -113,23 +131,23 @@ const Form = ({ form, clearData }) => {
     clearData();
     setFormData({
       customerName: "",
-      age: 0,
+      age: "",
       tel: "",
       address: "",
       diagnose: "",
       menu: "",
-      Ros: 0,
-      CYL_R: 0,
-      AxR: 0,
-      AddR: 0,
-      Los: 0,
-      CYL_L: 0,
-      AxL: 0,
-      AddL: 0,
-      PDR: 0,
-      PDL: 0,
-      SHR: 0,
-      SHL: 0,
+      Ros: "",
+      CYL_R: "",
+      AxR: "",
+      AddR: "",
+      Los: "",
+      CYL_L: "",
+      AxL: "",
+      AddL: "",
+      PDR: "",
+      PDL: "",
+      SHR: "",
+      SHL: "",
       FType: "",
       FPrice: 0,
       LType: "",
@@ -176,10 +194,10 @@ const Form = ({ form, clearData }) => {
 
   return (
     <div className="container mx-auto bg-white rounded-lg shadow-xl mt-5 p-5">
-      <div className="grid grid-cols-9 p-3">
-        <div className="relative flex col-span-2">
-          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold">
-            ชื่อลูกค้า :
+      <div className="grid grid-cols-9 p-3 max-md:grid-cols-1 max-xl:grid-cols-4">
+        <div className="relative flex col-span-2 ">
+          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
+            ชื่อลูกค้า <span className="text-red-500">*</span> :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
@@ -192,30 +210,29 @@ const Form = ({ form, clearData }) => {
             />
           </div>
         </div>
-        <div className="relative flex">
-          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold">
-            อายุ :
+        <div className="relative flex max-xl:col-span-2">
+          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
+            อายุ <span className="text-red-500">*</span> :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
-              type="number"
+              type="text"
               className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded age"
               id="age"
               name="age"
-              value={age}
+              value={age || ""}
               onChange={handleInputChange}
             />
           </div>
         </div>
         <div className="relative flex col-span-2">
-          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold">
-            เบอร์โทร :
+          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
+            เบอร์โทร <span className="text-red-500">*</span> :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
               type="text"
               className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
-              pattern="/(0)\d{9}/"
               id="tel"
               name="tel"
               value={tel || ""}
@@ -224,8 +241,8 @@ const Form = ({ form, clearData }) => {
           </div>
         </div>
         <div className="relative flex col-span-2">
-          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold">
-            ที่อยู่ :
+          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
+            ที่อยู่ <span className="text-red-500">*</span> :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
@@ -239,7 +256,7 @@ const Form = ({ form, clearData }) => {
           </div>
         </div>
         <div className="relative flex col-span-2">
-          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold">
+          <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
             โรคประจำตัว :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
@@ -255,25 +272,25 @@ const Form = ({ form, clearData }) => {
         </div>
       </div>
 
-      <div className=" grid grid-cols-3 p-6 gap-5">
+      <div className=" grid grid-cols-3 p-6 gap-5 max-md:grid-cols-1">
         <div className="col-span-2">
-          <div className="grid grid-cols-2 gap-5">
-            <div>
-              <p className="font-bold">รายการ</p>
-              <select
-                className="p-2 border border-black w-full rounded-lg cursor-pointer"
-                required
-                id="menu"
-                name="menu"
-                value={menu || ""}
-                onChange={handleInputChange}
-              >
-                <option value="">เลือกรายการ</option>
-                <option value="FL">FL</option>
-                <option value="L">L</option>
-                <option value="F">F</option>
-              </select>
-            </div>
+          <div className="w-1/2">
+            <p className="font-bold">
+              รายการ <span className="text-red-500">*</span>
+            </p>
+            <select
+              className="p-2 border border-black w-full rounded-lg cursor-pointer"
+              required
+              id="menu"
+              name="menu"
+              value={menu || ""}
+              onChange={handleInputChange}
+            >
+              <option value="">เลือกรายการ</option>
+              <option value="FL">FL</option>
+              <option value="L">L</option>
+              <option value="F">F</option>
+            </select>
           </div>
 
           <div className="relative flex my-5">
@@ -281,13 +298,10 @@ const Form = ({ form, clearData }) => {
               R
             </span>
             <input
-              type="number"
-              step="0.25"
-              max={10}
-              min={-10}
+              type="text"
               id="Ros"
               name="Ros"
-              value={Ros}
+              value={Ros || ""}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
               onChange={handleInputChange}
             />
@@ -295,13 +309,10 @@ const Form = ({ form, clearData }) => {
               CYL
             </span>
             <input
-              type="number"
-              step="0.25"
-              max={10}
-              min={-10}
+              type="text"
               id="CYL_R"
               name="CYL_R"
-              value={CYL_R}
+              value={CYL_R || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -310,11 +321,9 @@ const Form = ({ form, clearData }) => {
             </span>
             <input
               type="number"
-              step="10"
-              min={0}
               id="AxR"
               name="AxR"
-              value={AxR}
+              value={AxR || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -323,11 +332,9 @@ const Form = ({ form, clearData }) => {
             </span>
             <input
               type="number"
-              step="0.25"
-              min={0}
               id="AddR"
               name="AddR"
-              value={AddR}
+              value={AddR || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -338,13 +345,10 @@ const Form = ({ form, clearData }) => {
               L
             </span>
             <input
-              type="number"
-              step="0.25"
-              max={10}
-              min={-10}
+              type="text"
               id="Los"
               name="Los"
-              value={Los}
+              value={Los || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -352,13 +356,10 @@ const Form = ({ form, clearData }) => {
               CYL
             </span>
             <input
-              type="number"
-              step="0.25"
-              max={10}
-              min={-10}
+              type="text"
               id="CYL_L"
               name="CYL_L"
-              value={CYL_L}
+              value={CYL_L || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -366,12 +367,10 @@ const Form = ({ form, clearData }) => {
               Ax
             </span>
             <input
-              type="number"
-              step="10"
-              min={0}
+              type="text"
               id="AxL"
               name="AxL"
-              value={AxL}
+              value={AxL || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -379,12 +378,10 @@ const Form = ({ form, clearData }) => {
               Add
             </span>
             <input
-              type="number"
-              step="0.25"
-              min={0}
+              type="text"
               id="AddL"
               name="AddL"
-              value={AddL}
+              value={AddL || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -395,13 +392,10 @@ const Form = ({ form, clearData }) => {
               PD/R
             </span>
             <input
-              type="number"
-              min={0}
-              max={40}
-              step={1}
+              type="text"
               id="PDR"
               name="PDR"
-              value={PDR}
+              value={PDR || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -409,13 +403,10 @@ const Form = ({ form, clearData }) => {
               L
             </span>
             <input
-              type="number"
-              min={0}
-              max={40}
-              step={1}
+              type="text"
               id="PDL"
               name="PDL"
-              value={PDL}
+              value={PDL || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -423,13 +414,10 @@ const Form = ({ form, clearData }) => {
               SH/R
             </span>
             <input
-              type="number"
-              min={0}
-              max={40}
-              step={1}
+              type="text"
               id="SHR"
               name="SHR"
-              value={SHR}
+              value={SHR || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -437,13 +425,10 @@ const Form = ({ form, clearData }) => {
               L
             </span>
             <input
-              type="number"
-              min={0}
-              max={40}
-              step={1}
+              type="text"
               id="SHL"
               name="SHL"
-              value={SHL}
+              value={SHL || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto rounded-r border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -465,12 +450,9 @@ const Form = ({ form, clearData }) => {
               (
             </span>
             <input
-              min={0}
-              max={40}
-              step={1}
               id="FPrice"
               name="FPrice"
-              value={FPrice}
+              value={FPrice || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -492,13 +474,10 @@ const Form = ({ form, clearData }) => {
               (
             </span>
             <input
-              type="number"
-              min={0}
-              max={40}
-              step={1}
+              type="text"
               id="LPrice"
               name="LPrice"
-              value={LPrice}
+              value={LPrice || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto  border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -532,7 +511,7 @@ const Form = ({ form, clearData }) => {
           </div>
         </div>
 
-        <div className="mt-5">
+        <div className="mt-5 max-md:block">
           <div className="relative flex text-center">
             <span className=" w-36 rounded-tl border border-r-0 border-b-0 border-solid border-gray-500 py-3 px-6 text-center first-letter:leading-[1.6]">
               ราคา
@@ -545,7 +524,7 @@ const Form = ({ form, clearData }) => {
                 className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
                 id="PriceTotal"
                 name="PriceTotal"
-                value={PriceTotal}
+                value={PriceTotal || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -562,7 +541,7 @@ const Form = ({ form, clearData }) => {
                 className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
                 id="Earn"
                 name="Earn"
-                value={Earn}
+                value={Earn || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -579,7 +558,7 @@ const Form = ({ form, clearData }) => {
                 className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
                 id="Balance"
                 name="Balance"
-                value={Balance}
+                value={Balance || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -609,7 +588,7 @@ const Form = ({ form, clearData }) => {
                 className="w-full border border-solid border-gray-500 bg-transparent px-3 py-[0.25rem] rounded"
                 id="DoP"
                 name="DoP"
-                value={DoP}
+                value={DoP || ""}
                 onChange={handleInputChange}
               />
             </div>
@@ -630,23 +609,27 @@ const Form = ({ form, clearData }) => {
             </div>
           </div>
         </div>
-        <div className="flex">
-          <button
-            className="flex text-white bg-green-500 w-fit p-3 rounded-md hover:bg-green-900 transition-all duration-200 ease-in-out"
-            onClick={handleSubmit}
-          >
-            <Save size={24} className="mx-1" />
-            {form.length === 0 ? "เพิ่มข้อมูล" : "บันทึกข้อมูล"}
-          </button>
+      </div>
+      <div className="flex max">
+        <button
+          className={`flex text-white  w-fit p-3 rounded-md transition-all duration-200 ease-in-out ${
+            form.length === 0
+              ? "bg-green-500 hover:bg-green-900"
+              : "bg-blue-500 hover:bg-blue-900"
+          } `}
+          onClick={handleSubmit}
+        >
+          <Save size={24} className="mx-1" />
+          {form.length === 0 ? "เพิ่มข้อมูล" : "บันทึกข้อมูล"}
+        </button>
 
-          <button
-            className="flex text-white bg-red-500 w-fit p-3 rounded-md hover:bg-red-900 transition-all duration-200 ease-in-out mx-5"
-            onClick={ClearDataMain}
-          >
-            <X size={24} className="mx-1" />
-            ล้างข้อมูล
-          </button>
-        </div>
+        <button
+          className="flex text-white bg-red-500 w-fit p-3 rounded-md hover:bg-red-900 transition-all duration-200 ease-in-out mx-5"
+          onClick={ClearDataMain}
+        >
+          <X size={24} className="mx-1" />
+          ล้างข้อมูล
+        </button>
       </div>
     </div>
   );

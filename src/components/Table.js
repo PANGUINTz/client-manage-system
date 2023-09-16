@@ -37,6 +37,11 @@ const Table = ({ initialData, handleClickIcon }) => {
       sortable: true,
     },
     {
+      name: "รายการสินค้า",
+      selector: (row) => row.menu,
+      sortable: true,
+    },
+    {
       name: "ชื่อเลนส์",
       selector: (row) => row.FType,
       sortable: true,
@@ -59,18 +64,21 @@ const Table = ({ initialData, handleClickIcon }) => {
     {
       name: "",
       selector: (row) => (
-        <div className="flex items-end">
-          {/* <Eye
+        <div className="grid-cols-3 grid items-start">
+          <Eye
             className="text-blue-500 mx-3 cursor-pointer hover:text-blue-900"
-            onClick={() => handleClickIcon("views")}
-          /> */}
+            onClick={() => handleClickIcon("view", row.slug)}
+            size={20}
+          />
           <Edit
             className="text-yellow-500 mx-3 cursor-pointer hover:text-yellow-900"
-            onClick={() => handleClickIcon("edit", null, row.slug)}
+            onClick={() => handleClickIcon("edit", row.slug)}
+            size={20}
           />
           <Trash2
             className="text-red-500 mx-3 cursor-pointer hover:text-red-900"
-            onClick={() => handleClickIcon("delete", null, row.slug)}
+            onClick={() => handleClickIcon("delete", row.slug)}
+            size={20}
           />
         </div>
       ),
@@ -86,6 +94,7 @@ const Table = ({ initialData, handleClickIcon }) => {
         pagination
         paginationRowsPerPageOptions={[5, 10]}
         progressPending={pending}
+        // responsive
         subHeader
         subHeaderAlign="right"
         subHeaderWrap

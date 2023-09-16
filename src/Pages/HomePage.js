@@ -7,12 +7,15 @@ import buddhistEra from "dayjs/plugin/buddhistEra";
 import { deleteData, getData, getEditData } from "../services/customerService";
 import { useMount } from "../hooks";
 import Swal from "sweetalert2";
+import CardInfo from "../components/CardInfo";
 
 function App() {
   dayjs.extend(buddhistEra);
 
   const [initialData, setInitialData] = useState({});
   const [editData, setEditData] = useState([]);
+  const [viewData, setViewData] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const fetchDataForm = async (slug) => {
     try {
@@ -28,12 +31,19 @@ function App() {
     } catch (error) {}
   };
 
+  const fetchData = async (slug) => {
+    try {
+      const initData = await getEditData(slug);
+      setViewData({ ...initData.data });
+    } catch (error) {}
+  };
+
   const clearData = () => {
     setEditData([]);
   };
   useMount(() => void fetchDataDefault());
 
-  const handleClickIcon = (icon, slugCustomer, slugTrans) => {
+  const handleClickIcon = (icon, slugTrans) => {
     if (icon === "edit") {
       return fetchDataForm(slugTrans);
     }
@@ -65,19 +75,27 @@ function App() {
         });
       } catch (error) {}
     }
+    if (icon === "view") {
+      setIsOpen(true);
+      return fetchData(slugTrans);
+    }
+  };
+
+  const handleClosed = () => {
+    setIsOpen(false);
   };
 
   return (
-    <div className="container mx-auto">
-      <Form form={editData} clearData={clearData} />
-      <Table initialData={initialData} handleClickIcon={handleClickIcon} />
+    <div className="container mx-auto relative">
+      <div className={isOpen ? "blur-sm" : ""}>
+        <Form form={editData} clearData={clearData} />
+        <Table initialData={initialData} handleClickIcon={handleClickIcon} />
+      </div>
+      {isOpen && (
+        <CardInfo initialData={viewData} handleClosed={handleClosed} />
+      )}
     </div>
   );
 }
 
 export default App;
-
-export const DateLongTH = (date) => {
-  dayjs.locale("th");
-  return dayjs(date).format("DD MMMM BBBB");
-};
