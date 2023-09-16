@@ -141,6 +141,7 @@ const Form = ({ form, clearData }) => {
       Balance: 0,
       Desc: "",
       Signature: "",
+      DoP: "",
     });
   };
 

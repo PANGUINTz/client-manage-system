@@ -60,10 +60,10 @@ const Table = ({ initialData, handleClickIcon }) => {
       name: "",
       selector: (row) => (
         <div className="flex items-end">
-          <Eye
+          {/* <Eye
             className="text-blue-500 mx-3 cursor-pointer hover:text-blue-900"
             onClick={() => handleClickIcon("views")}
-          />
+          /> */}
           <Edit
             className="text-yellow-500 mx-3 cursor-pointer hover:text-yellow-900"
             onClick={() => handleClickIcon("edit", null, row.slug)}
