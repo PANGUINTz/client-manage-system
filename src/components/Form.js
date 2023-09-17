@@ -94,18 +94,18 @@ const Form = ({ form, clearData }) => {
           showConfirmButton: false,
           timer: 1000,
         });
-      }
-
-      const { success } = await createData(formData);
-      if (success) {
-        Swal.fire({
-          title: "เพิ่มรายชื่อเสร็จสิ้น",
-          icon: "success",
-          showConfirmButton: false,
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+      } else {
+        const { success } = await createData(formData);
+        if (success) {
+          Swal.fire({
+            title: "เพิ่มรายชื่อเสร็จสิ้น",
+            icon: "success",
+            showConfirmButton: false,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
       }
     } else {
       const { success } = await updateData(
