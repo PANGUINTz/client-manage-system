@@ -2,7 +2,6 @@ import axios from "axios";
 // import { destroyUserSession, getAccessToken, LOGIN_URL } from "./AuthService";
 // const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
 const baseUrl = `${process.env.REACT_APP_API_BASE_URL}/api`;
-console.log(baseUrl);
 
 const api = axios.create({
   baseURL: baseUrl,
