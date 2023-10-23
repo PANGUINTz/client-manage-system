@@ -33,7 +33,7 @@ const Table = ({ initialData, handleClickIcon }) => {
     },
     {
       name: "ชื่อ-นามสกุล",
-      selector: (row) => row.customer.customerName,
+      selector: (row) => row.customer?.customerName,
       sortable: true,
     },
     {

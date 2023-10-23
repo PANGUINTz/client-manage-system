@@ -80,6 +80,26 @@ const Form = ({ form, clearData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.length === 0) {
+      if (formData.tel !== "") {
+        if (!patternTel.test(formData?.tel)) {
+          Swal.fire({
+            title: "กรุณากรอกเบอร์โทรให้ถูกต้อง",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      }
+
+      if (formData.age === "") {
+        Swal.fire({
+          title: "กรุณากรอกอายุ",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+
       if (formData.customerName === "" || formData.menu === "") {
         Swal.fire({
           title: "กรุณากรอกข้อมูลลูกค้าและรายการ",
@@ -87,14 +107,8 @@ const Form = ({ form, clearData }) => {
           showConfirmButton: false,
           timer: 1000,
         });
-      } else if (!patternTel.test(formData?.tel)) {
-        Swal.fire({
-          title: "กรุณากรอกเบอร์โทรให้ถูกต้อง",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1000,
-        });
       } else {
+        console.log("success");
         const { success } = await createData(formData);
         if (success) {
           Swal.fire({
@@ -227,7 +241,7 @@ const Form = ({ form, clearData }) => {
         </div>
         <div className="relative flex col-span-2">
           <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
-            เบอร์โทร <span className="text-red-500">*</span> :
+            เบอร์โทร :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
@@ -242,7 +256,7 @@ const Form = ({ form, clearData }) => {
         </div>
         <div className="relative flex col-span-2">
           <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
-            ที่อยู่ <span className="text-red-500">*</span> :
+            ที่อยู่ :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input

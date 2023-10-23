@@ -9,7 +9,7 @@ const CardInfo = ({ initialData, handleClosed }) => {
     }, 1000);
   }
   return (
-    <div className="card">
+    <div className="card w-1/3">
       <div className=" bg-white rounded border border-black max-md:w-screen">
         <div className="p-4">
           <div className="flex justify-between">
