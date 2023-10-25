@@ -9,7 +9,7 @@ const CardInfo = ({ initialData, handleClosed }) => {
     }, 1000);
   }
   return (
-    <div className="card w-1/3">
+    <div className="fixed top-1/3 left-1/2 -translate-x-1/2 w-1/3 max-md:w-full max-md:top-1/4">
       <div className=" bg-white rounded border border-black max-md:w-screen">
         <div className="p-4">
           <div className="flex justify-between">
@@ -173,20 +173,42 @@ const CardInfo = ({ initialData, handleClosed }) => {
             )}
 
             {loading ? (
-              <div className="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-[360px] animate-pulse"></div>
+              <div className="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-[360px] animate-pulse mb-1"></div>
             ) : (
-              <div className="grid grid-cols-3">
+              <div className="grid grid-cols-2">
                 <p>
-                  <span className="font-bold">ราคากรอบ </span>
+                  <span className="font-bold">ราคากรอบแว่น </span>
                   {initialData?.FPrice}
                 </p>
+                <p>
+                  <span className="font-bold">ส่วนลดกรอบแว่น </span>
+                  {initialData?.dcF}
+                </p>
+              </div>
+            )}
+
+            {loading ? (
+              <div className="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-[360px] animate-pulse mb-1"></div>
+            ) : (
+              <div className="grid grid-cols-2">
                 <p>
                   <span className="font-bold">ราคาเลนส์ </span>
                   {initialData?.LPrice}
                 </p>
                 <p>
-                  <span className="font-bold">ราคาทั้งหมด </span>
-                  {initialData?.PriceTotal}
+                  <span className="font-bold">ส่วนลดเลนส์ </span>
+                  {initialData?.dcL}
+                </p>
+              </div>
+            )}
+
+            {loading ? (
+              <div className="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-[240px] animate-pulse"></div>
+            ) : (
+              <div>
+                <p className="text-center text-2xl">
+                  <b>ราคาทั้งหมด </b>
+                  {initialData?.PriceTotal} <b>บาท</b>
                 </p>
               </div>
             )}

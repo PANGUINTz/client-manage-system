@@ -31,8 +31,10 @@ const Form = ({ form, clearData }) => {
     SHL: "",
     FType: "",
     FPrice: 0,
+    dcF: 0,
     LType: "",
     LPrice: 0,
+    dcL: 0,
     FBrand: "",
     color: "",
     PriceTotal: 0,
@@ -63,8 +65,10 @@ const Form = ({ form, clearData }) => {
     SHL,
     FType,
     FPrice,
+    dcF,
     LType,
     LPrice,
+    dcL,
     FBrand,
     color,
     PriceTotal,
@@ -80,7 +84,14 @@ const Form = ({ form, clearData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.length === 0) {
-      if (formData.tel !== "") {
+      if (formData.customerName === "" || formData.menu === "") {
+        Swal.fire({
+          title: "กรุณากรอกข้อมูลลูกค้าและรายการ",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      } else if (formData.tel !== "") {
         if (!patternTel.test(formData?.tel)) {
           Swal.fire({
             title: "กรุณากรอกเบอร์โทรให้ถูกต้อง",
@@ -89,26 +100,7 @@ const Form = ({ form, clearData }) => {
             timer: 1000,
           });
         }
-      }
-
-      if (formData.age === "") {
-        Swal.fire({
-          title: "กรุณากรอกอายุ",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1000,
-        });
-      }
-
-      if (formData.customerName === "" || formData.menu === "") {
-        Swal.fire({
-          title: "กรุณากรอกข้อมูลลูกค้าและรายการ",
-          icon: "error",
-          showConfirmButton: false,
-          timer: 1000,
-        });
       } else {
-        console.log("success");
         const { success } = await createData(formData);
         if (success) {
           Swal.fire({
@@ -226,7 +218,7 @@ const Form = ({ form, clearData }) => {
         </div>
         <div className="relative flex max-xl:col-span-2">
           <span className=" py-3 px-6  text-center first-letter:leading-[1.6] font-bold max-md:w-36 max-md:text-start">
-            อายุ <span className="text-red-500">*</span> :
+            อายุ :
           </span>
           <div className="relative block w-[1px] min-w-0 flex-auto  bg-transparent bg-clip-padding p-2 leading-[1.6]">
             <input
@@ -474,11 +466,31 @@ const Form = ({ form, clearData }) => {
               )
             </span>
             <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
-              L
+              ส่วนลด
+            </span>
+            <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
+              (
             </span>
             <input
               type="text"
               className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
+              id="dcF"
+              name="dcF"
+              value={dcF || ""}
+              onChange={handleInputChange}
+            />
+            <span className="flex items-center whitespace-nowrap border rounded-r  border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
+              )
+            </span>
+          </div>
+          {/*  */}
+          <div className="relative flex my-5">
+            <span className="flex items-center rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
+              L
+            </span>
+            <input
+              type="text"
+              className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6]"
               id="LType"
               name="LType"
               value={LType || ""}
@@ -488,10 +500,26 @@ const Form = ({ form, clearData }) => {
               (
             </span>
             <input
-              type="text"
               id="LPrice"
               name="LPrice"
               value={LPrice || ""}
+              onChange={handleInputChange}
+              className="relative m-0 block w-[1px] min-w-0 flex-auto border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
+            />
+            <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
+              )
+            </span>
+            <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
+              ส่วนลด
+            </span>
+            <span className="flex items-center whitespace-nowrap border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
+              (
+            </span>
+            <input
+              type="text"
+              id="dcL"
+              name="dcL"
+              value={dcL || ""}
               onChange={handleInputChange}
               className="relative m-0 block w-[1px] min-w-0 flex-auto  border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] leading-[1.6] "
             />
@@ -499,6 +527,7 @@ const Form = ({ form, clearData }) => {
               )
             </span>
           </div>
+          {/*  */}
           <div className="relative flex my-5">
             <span className="flex items-center rounded-l border border-r-0 border-solid border-neutral-300 px-3 py-[0.25rem] text-center first-letter:leading-[1.6] bg-gray-200">
               รุ่น
